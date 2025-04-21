@@ -182,7 +182,7 @@ export const productsdata = async (req, res) => {
 export const getSingleProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    console.log("single prodct");
+    // console.log("single prodct");
     
     if (!product) {
       return sendErrorResponse(res, 404, "Product not found");
