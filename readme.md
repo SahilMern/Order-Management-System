@@ -52,31 +52,46 @@
 
 <br />
 
-## 🚀 Installation Guide
-### Backend Setup
-1. Create `.env` file in root directory:
+## 🚀 Installation Guide (Backend + Frontend)
+
+Follow these steps to set up the complete development environment for the project.
+
+### 📦 Prerequisites
+
+- Node.js ≥ 14  
+- MongoDB Atlas or local MongoDB  
+- Cloudinary account  
+- Git
+
+---
+
+### 🛠️ Project Setup
+
 ```bash
+# 1. Clone the repository
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+
+# 2. Backend Setup
 cd backend
+npm install
+
+# 3. Create .env file in backend folder
 touch .env
 
-## 🔒 Environment Variables Setup
-
-### Backend Configuration (.env)
-Create a `.env` file in your backend directory with these **required** variables:
-
-```env
-# MongoDB Configuration (Required)
+# MongoDB Configuration
 DB_URL=your_mongodb_connection_string
 
-# JWT Authentication (Required)
+# JWT Authentication
 JWT_SECRET=your_secure_jwt_secret
 JWT_EXPIRE=30d
 
-# Cloudinary Configuration (Required for image uploads)
+# Cloudinary Configuration
 CLOUDINARY_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 
-# Server Configuration (Required)
-PORT=your_preferred_port
+# Server Configuration
+PORT=5000
 FRONTEND_URL=http://localhost:3000
+
