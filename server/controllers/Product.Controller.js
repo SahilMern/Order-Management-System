@@ -125,12 +125,13 @@ export const getAllProduct = async (req, res) => {
   }
 };
 
+//TODO:- COMMON FOR ALL
 export const productsdata = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
     const { search, minPrice, maxPrice, category } = req.query;
-    console.log(category, "category");
+
 
     const filter = {};
 
@@ -181,7 +182,8 @@ export const productsdata = async (req, res) => {
 export const getSingleProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-
+    console.log("single prodct");
+    
     if (!product) {
       return sendErrorResponse(res, 404, "Product not found");
     }
@@ -199,8 +201,6 @@ export const getSingleProduct = async (req, res) => {
 export const updateProductFields = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id, "iiis");
-
     const { name, description, price, category, qunatity } = req.body;
 
     if (!name && !description && !price && !category && !qunatity) {

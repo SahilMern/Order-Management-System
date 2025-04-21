@@ -13,17 +13,43 @@ import {
   FiLogOut,
   FiUser,
 } from "react-icons/fi";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { authUrl } from "@/app/helper/BackendUrl";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const [cartItems] = useState(3); //In future redux toolkit se lee lunga
+  const [cartItems] = useState(3);
   const [wishlistItems] = useState(2);
-  const handleLogout = () => {
-    dispatch(clearUser());
-    router.push("/login");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      // Make API call to logout endpoint
+      await axios.post(`${authUrl}/logout`, {}, {
+        withCredentials: true
+      });
+      
+      // Clear client-side state
+      dispatch(clearUser());
+      
+      // Show success message
+      toast.success("Logged out successfully");
+      
+      // Redirect to login page
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      toast.error("Failed to logout. Please try again.");
+    } finally {
+      setIsLoggingOut(false);
+      setMobileMenuOpen(false);
+    }
   };
 
   const navLinks = [
@@ -45,7 +71,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation - Simplified */}
+          {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-6">
             {navLinks.map((link) => (
               <Link
@@ -92,12 +118,19 @@ const Navbar = () => {
                 <button
                   onClick={handleLogout}
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium"
+                  disabled={isLoggingOut}
                 >
-                  <FiLogOut className="h-4 w-4 inline mr-1" />
-                  LOGOUT
+                  {isLoggingOut ? (
+                    "Logging out..."
+                  ) : (
+                    <>
+                      <FiLogOut className="h-4 w-4 inline mr-1" />
+                      LOGOUT
+                    </>
+                  )}
                 </button>
                 <div
-                  className="flex items-center text-gray-700 text-sm"
+                  className="flex items-center text-gray-700 text-sm cursor-pointer"
                   onClick={() => router.push("/profile")}
                 >
                   <FiUser className="h-4 w-4 mr-1" />
@@ -201,16 +234,26 @@ const Navbar = () => {
                     </>
                   )}
                   <button
+                    onClick={handleLogout}
+                    className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                    disabled={isLoggingOut}
+                  >
+                    {isLoggingOut ? (
+                      "Logging out..."
+                    ) : (
+                      <>
+                        <FiLogOut className="mr-2 h-4 w-4" />
+                        LOGOUT
+                      </>
+                    )}
+                  </button>
+                  <div 
+                    className="flex items-center px-3 py-2 text-gray-700 text-sm cursor-pointer"
                     onClick={() => {
-                      handleLogout();
+                      router.push("/profile");
                       setMobileMenuOpen(false);
                     }}
-                    className="flex items-center w-full px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   >
-                    <FiLogOut className="mr-2 h-4 w-4" />
-                    LOGOUT
-                  </button>
-                  <div className="flex items-center px-3 py-2 text-gray-700 text-sm">
                     <FiUser className="mr-2 h-4 w-4" />
                     <span>{user.name}</span>
                   </div>

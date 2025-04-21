@@ -22,12 +22,12 @@ router.post(
   addProduct
 ); //? Creating Products
 
-router.get("/getproducts", authenticate, getAllProduct); //? Get All Products
-router.get("/getproduct/:id", authenticate, getSingleProduct); //? Get Single Product
+router.get("/getproducts", authenticate, authorizeAdmin,getAllProduct); //? Get All Products
 router.put("/updateproduct/:id", updateProductFields); //? Update Products Field
 router.put("/updateimage/:id", upload.single("image"), updateProductImage); //? Update Image Only
+router.delete("/:id",authenticate,authorizeAdmin, deleteProduct); //? Delete Product
 
-router.delete("/:id", deleteProduct); //? Delete Product
+router.get("/getproduct/:id", getSingleProduct); //? Get Single Product
 router.get("/getall", productsdata); //? Comman page for user
 
 export default router;
